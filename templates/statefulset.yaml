@@ -1,0 +1,60 @@
+apiVersion: apps/v1beta2
+kind: StatefulSet 
+metadata:
+  name: {{ template "opentsdb.fullname" . }}
+  labels:
+    app: {{ template "opentsdb.name" . }}
+    chart: {{ template "opentsdb.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "opentsdb.name" . }}
+      release: {{ .Release.Name }}  
+  template:
+    metadata:
+      labels:
+        app: {{ template "opentsdb.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: CREATE_TABLE
+            value: "{{ .Values.env.createTable }}"
+          - name: HDFS_PATH
+            value: {{ .Values.env.hdfsPath }}
+          - name: ZOOKEEPER_SERVICE_LIST
+            value: {{ .Values.env.zookeeperServiceList }}
+          - name: ZOOKEEPER_PORT
+            value: "{{ .Values.env.zookeeperPort }}"
+          - name: ZNODE_PARENT
+            value: {{ .Values.env.znodeParent }}
+          - name: OPENTSDB_PORT
+            value: "{{ .Values.env.opentsdbPort }}"
+          - name: COMPRESSION
+            value: {{ .Values.env.compression }}
+          command:
+          - "/bin/bash"
+          - "/opt/opentsdb-service.sh"
+          ports:
+          - containerPort: {{ .Values.env.opentsdbPort }}
+            name: port1
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

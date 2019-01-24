@@ -1,0 +1,44 @@
+# Default values for opentsdb.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: 33098876/opentsdb
+  tag: v1
+  pullPolicy: Always
+
+service:
+  type: NodePort
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 100m
+    memory: 1024Mi
+  requests:
+    cpu: 100m
+    memory: 1024Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+env:
+  ## opentsdb create table on hbase
+  createTable: "N"
+  ## data store in hdfs
+  hdfsPath: hbase-hdfs-nn:9000
+  ## zookeeper 
+  zookeeperServiceList: myzk-zookeeper 
+  zookeeperPort: "2181"
+  znodeParent: hbase
+  ## compression mode: none, snnapy, loz
+  compression: NONE
+  opentsdbPort: "4242"

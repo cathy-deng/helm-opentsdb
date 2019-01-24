@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "opentsdb.fullname" . }}
+  labels:
+    app: {{ template "opentsdb.name" . }}
+    chart: {{ template "opentsdb.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.env.opentsdbPort }}
+      targetPort: {{ .Values.env.opentsdbPort }}
+      name: port1
+  selector:
+    app: {{ template "opentsdb.name" . }}
+    release: {{ .Release.Name }}
