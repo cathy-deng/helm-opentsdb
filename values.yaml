@@ -32,7 +32,7 @@ affinity: {}
 
 env:
   ## opentsdb create table on hbase
-  createTable: "N"
+  createTable: "Y"
   ## data store in hdfs
   hdfsPath: hbase-hdfs-nn:9000
   ## zookeeper 
