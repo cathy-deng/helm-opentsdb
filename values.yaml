@@ -39,6 +39,6 @@ env:
   zookeeperServiceList: myzk-zookeeper 
   zookeeperPort: "2181"
   znodeParent: hbase
-  ## compression mode: none, snnapy, loz
+  ## compression mode: none, snnapy, lzo
   compression: NONE
   opentsdbPort: "4242"
